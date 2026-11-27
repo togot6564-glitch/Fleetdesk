@@ -10,8 +10,9 @@ body { background: #f0f4f8; padding: 15px; color: #333; }
 .container { max-width: 600px; margin: 0 auto; }
 h1 { color: #1e40af; text-align: center; margin-bottom: 15px; font-size: 24px; }
 .nav { display: flex; gap: 6px; margin-bottom: 15px; overflow-x: auto; }
-.nav button { flex: 1; padding: 10px 8px; background: white; border: 2px solid #1e40af; color: #1e40af; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; min-width: 80px; }
+.nav button { flex: 1; padding: 10px 8px; background: white; border: 2px solid #1e40af; color: #1e40af; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; min-width: 80px; position: relative; }
 .nav button.active { background: #1e40af; color: white; }
+.badge { position: absolute; top: -5px; right: -5px; background: #dc2626; color: white; border-radius: 10px; padding: 2px 6px; font-size: 10px; font-weight: bold; min-width: 18px; text-align: center; }
 .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 h2 { color: #1e40af; font-size: 18px; margin-bottom: 15px; }
 .form-group { margin-bottom: 12px; }
@@ -20,9 +21,10 @@ input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radiu
 .btn { width: 100%; padding: 12px; background: #1e40af; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
 .btn-hapus { background: #dc2626; padding: 8px 12px; font-size: 12px; width: auto; margin-top: 8px; }
 .btn-status { background: #16a34a; padding: 8px 12px; font-size: 12px; width: auto; margin-top: 8px; margin-right: 5px; }
-.mobil-card, .penyewa-card, .transaksi-card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #1e40af; }
-.mobil-card h3, .penyewa-card h3, .transaksi-card h3 { color: #1e40af; margin-bottom: 8px; }
-.mobil-card p, .penyewa-card p, .transaksi-card p { font-size: 13px; color: #555; margin-bottom: 4px; }
+.btn-selesai { background: #059669; padding: 8px 12px; font-size: 12px; width: auto; margin-top: 8px; margin-right: 5px; }
+.mobil-card, .penyewa-card, .transaksi-card, .reminder-card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #1e40af; }
+.mobil-card h3, .penyewa-card h3, .transaksi-card h3, .reminder-card h3 { color: #1e40af; margin-bottom: 8px; }
+.mobil-card p, .penyewa-card p, .transaksi-card p, .reminder-card p { font-size: 13px; color: #555; margin-bottom: 4px; }
 .status { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-top: 5px; }
 .status-tersedia { background: #dcfce7; color: #166534; }
 .status-disewa { background: #fef3c7; color: #92400e; }
@@ -30,6 +32,10 @@ input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radiu
 .status-pending { background: #fef3c7; color: #92400e; }
 .status-aktif { background: #dbeafe; color: #1e40af; }
 .status-selesai { background: #dcfce7; color: #166534; }
+.status-mendesak { background: #fee2e2; color: #991b1b; }
+.status-segera { background: #fef3c7; color: #92400e; }
+.status-aman { background: #dcfce7; color: #166534; }
+.status-sudah { background: #e5e7eb; color: #6b7280; text-decoration: line-through; }
 .notif { padding: 12px; border-radius: 6px; margin-bottom: 15px; display: none; font-size: 14px; }
 .notif-sukses { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
 .notif-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
@@ -51,6 +57,9 @@ input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radiu
 .income-label { font-size: 13px; opacity: 0.9; }
 .income-value { font-size: 26px; font-weight: bold; margin-top: 5px; }
 .income-sub { font-size: 12px; opacity: 0.8; margin-top: 5px; }
+.alert-box { background: #fee2e2; border-left: 4px solid #dc2626; padding: 12px; border-radius: 6px; margin-bottom: 10px; }
+.alert-box h4 { color: #991b1b; margin-bottom: 5px; font-size: 14px; }
+.alert-box p { font-size: 12px; color: #7f1d1d; }
 </style>
 </head>
 <body>
@@ -61,6 +70,7 @@ input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radiu
     <button id="btnArmada" onclick="showSection('armada')">🚗 Armada</button>
     <button id="btnPenyewa" onclick="showSection('penyewa')">👤 Penyewa</button>
     <button id="btnTransaksi" onclick="showSection('transaksi')">📋 Transaksi</button>
+    <button id="btnReminder" onclick="showSection('reminder')">⏰ Reminder <span id="badgeReminder" class="badge" style="display:none;">0</span></button>
   </div>
   <div id="notif" class="notif"></div>
 
@@ -71,6 +81,7 @@ input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radiu
       <div class="income-value" id="pendapatanBulan">Rp 0</div>
       <div class="income-sub" id="transaksiAktif">0 transaksi aktif</div>
     </div>
+    <div id="alertDashboard"></div>
     <div class="stat-grid">
       <div class="stat-card green">
         <div class="stat-label">🚗 Total Mobil</div>
@@ -146,6 +157,21 @@ input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radiu
     </div>
     <div class="card"><h2>Daftar Transaksi (<span id="jumlahTransaksi">0</span>)</h2><div id="daftarTransaksi"></div></div>
   </div>
+
+  <!-- REMINDER -->
+  <div id="section-reminder" class="section">
+    <div class="card">
+      <h2>Tambah Reminder Baru</h2>
+      <div class="form-group"><label>Jenis Reminder</label><select id="jenisReminder"><option value="Servis">🛠️ Servis Mobil</option><option value="Pajak">📅 Jatuh Tempo Pajak</option><option value="Lainnya">📌 Lainnya</option></select></div>
+      <div class="form-group"><label>Judul</label><input type="text" id="judulReminder" placeholder="Contoh: Ganti Oli Avanza"></div>
+      <div class="form-group"><label>Mobil Terkait</label><select id="mobilReminder"><option value="">-- Pilih Mobil (opsional) --</option></select></div>
+      <div class="form-group"><label>Tanggal Reminder</label><input type="date" id="tglReminder"></div>
+      <div class="form-group"><label>Catatan</label><input type="text" id="catatanReminder" placeholder="Contoh: Ganti oli setiap 10.000 km"></div>
+      <button class="btn" onclick="simpanReminder()">💾 Simpan Reminder</button>
+    </div>
+    <div class="card"><h2>🔔 Reminder Mendesak (<span id="jumlahMendesak">0</span>)</h2><div id="daftarMendesak"></div></div>
+    <div class="card"><h2>📋 Semua Reminder (<span id="jumlahReminder">0</span>)</h2><div id="daftarReminder"></div></div>
+  </div>
 </div>
 
 <script type="module">
@@ -166,8 +192,10 @@ const db = getFirestore(app);
 let dataMobil = [];
 let dataPenyewa = [];
 let dataTransaksi = [];
+let dataReminder = [];
 
 document.getElementById('tglMulai').valueAsDate = new Date();
+document.getElementById('tglReminder').valueAsDate = new Date();
 
 window.showSection = function(name) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -186,36 +214,48 @@ function tampilkanNotif(pesan, tipe) {
 
 function formatRupiah(a) { return 'Rp ' + (a || 0).toLocaleString('id-ID'); }
 
+function formatTanggal(tgl) {
+  if (!tgl) return '-';
+  const d = new Date(tgl);
+  return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function hitungHariLagi(tgl) {
+  if (!tgl) return 999;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const target = new Date(tgl); target.setHours(0,0,0,0);
+  return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+}
+
+function getStatusReminder(hariLagi, sudah) {
+  if (sudah) return { class: 'status-sudah', label: 'Sudah' };
+  if (hariLagi < 0) return { class: 'status-mendesak', label: 'Terlewat!' };
+  if (hariLagi <= 3) return { class: 'status-mendesak', label: 'Mendesak' };
+  if (hariLagi <= 7) return { class: 'status-segera', label: 'Segera' };
+  return { class: 'status-aman', label: 'Aman' };
+}
+
 function updateDashboard() {
-  // Statistik mobil
   const totalMobil = dataMobil.length;
   const tersedia = dataMobil.filter(m => m.status === 'Tersedia').length;
   const disewa = dataMobil.filter(m => m.status === 'Disewa').length;
   const maintenance = dataMobil.filter(m => m.status === 'Maintenance').length;
-
-  // Statistik penyewa
   const totalPenyewa = dataPenyewa.length;
-
-  // Statistik transaksi
   const totalTransaksi = dataTransaksi.length;
   const pending = dataTransaksi.filter(t => t.status === 'Pending').length;
   const aktif = dataTransaksi.filter(t => t.status === 'Aktif').length;
   const selesai = dataTransaksi.filter(t => t.status === 'Selesai').length;
 
-  // Pendapatan bulan ini (dari transaksi aktif + selesai di bulan ini)
   const bulanIni = new Date().getMonth();
   const tahunIni = new Date().getFullYear();
   let pendapatan = 0;
   dataTransaksi.forEach(t => {
     const tgl = new Date(t.tanggalMulai);
-    if (t.status === 'Aktif' || t.status === 'Selesai') {
-      if (tgl.getMonth() === bulanIni && tgl.getFullYear() === tahunIni) {
-        pendapatan += (t.total || 0);
-      }
+    if ((t.status === 'Aktif' || t.status === 'Selesai') && tgl.getMonth() === bulanIni && tgl.getFullYear() === tahunIni) {
+      pendapatan += (t.total || 0);
     }
   });
 
-  // Update UI Dashboard
   document.getElementById('pendapatanBulan').textContent = formatRupiah(pendapatan);
   document.getElementById('transaksiAktif').textContent = aktif + ' transaksi aktif';
   document.getElementById('statTotalMobil').textContent = totalMobil;
@@ -231,6 +271,28 @@ function updateDashboard() {
   document.getElementById('ringkasPending').textContent = pending;
   document.getElementById('ringkasAktif').textContent = aktif;
   document.getElementById('ringkasSelesai').textContent = selesai;
+
+  // Alert di Dashboard untuk reminder mendesak
+  const reminderMendesak = dataReminder.filter(r => {
+    const hl = hitungHariLagi(r.tanggal);
+    return !r.sudah && hl <= 3;
+  });
+  const alertBox = document.getElementById('alertDashboard');
+  if (reminderMendesak.length > 0) {
+    alertBox.innerHTML = '<div class="alert-box"><h4>🔔 Ada ' + reminderMendesak.length + ' reminder mendesak!</h4><p>Klik tab ⏰ Reminder untuk melihat detail.</p></div>';
+  } else {
+    alertBox.innerHTML = '';
+  }
+
+  // Update badge di tab Reminder
+  const badge = document.getElementById('badgeReminder');
+  const totalAktif = dataReminder.filter(r => !r.sudah && hitungHariLagi(r.tanggal) <= 7).length;
+  if (totalAktif > 0) {
+    badge.textContent = totalAktif;
+    badge.style.display = 'block';
+  } else {
+    badge.style.display = 'none';
+  }
 }
 
 window.simpanMobil = async function() {
@@ -331,6 +393,42 @@ window.ubahStatus = async function(id, statusBaru) {
   } catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
 };
 
+window.simpanReminder = async function() {
+  const jenis = document.getElementById('jenisReminder').value;
+  const judul = document.getElementById('judulReminder').value.trim();
+  const mobilId = document.getElementById('mobilReminder').value;
+  const tanggal = document.getElementById('tglReminder').value;
+  const catatan = document.getElementById('catatanReminder').value.trim();
+  if (!judul || !tanggal) { tampilkanNotif('❌ Judul dan tanggal wajib diisi!', 'error'); return; }
+  const mobil = dataMobil.find(m => m.id === mobilId);
+  try {
+    await addDoc(collection(db, 'reminder'), {
+      jenis, judul, mobilId,
+      mobilPlat: mobil ? mobil.plat : null,
+      mobilMerk: mobil ? mobil.merk : null,
+      tanggal, catatan, sudah: false,
+      tanggalDibuat: new Date().toISOString()
+    });
+    tampilkanNotif('✅ Reminder berhasil disimpan!', 'sukses');
+    document.getElementById('judulReminder').value = '';
+    document.getElementById('mobilReminder').value = '';
+    document.getElementById('catatanReminder').value = '';
+  } catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
+};
+
+window.hapusReminder = async function(id) {
+  if (!confirm('Yakin hapus reminder ini?')) return;
+  try { await deleteDoc(doc(db, 'reminder', id)); tampilkanNotif('🗑️ Reminder dihapus!', 'sukses'); }
+  catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
+};
+
+window.tandaiSelesai = async function(id) {
+  try {
+    await updateDoc(doc(db, 'reminder', id), { sudah: true });
+    tampilkanNotif('✅ Reminder ditandai selesai!', 'sukses');
+  } catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
+};
+
 onSnapshot(query(collection(db, 'armada'), orderBy('tanggalDibuat', 'desc')), (snapshot) => {
   const daftar = document.getElementById('daftarMobil');
   document.getElementById('jumlahMobil').textContent = snapshot.size;
@@ -346,6 +444,7 @@ onSnapshot(query(collection(db, 'armada'), orderBy('tanggalDibuat', 'desc')), (s
     });
   }
   updateDropdownMobil();
+  updateDropdownReminderMobil();
   updateDashboard();
 });
 
@@ -393,6 +492,59 @@ onSnapshot(query(collection(db, 'transaksi'), orderBy('tanggalDibuat', 'desc')),
   updateDashboard();
 });
 
+onSnapshot(query(collection(db, 'reminder'), orderBy('tanggal', 'asc')), (snapshot) => {
+  dataReminder = [];
+  snapshot.forEach((docSnap) => { dataReminder.push({ id: docSnap.id, ...docSnap.data() }); });
+
+  const daftarMendesak = document.getElementById('daftarMendesak');
+  const daftarSemua = document.getElementById('daftarReminder');
+  document.getElementById('jumlahReminder').textContent = dataReminder.length;
+
+  const mendesak = dataReminder.filter(r => {
+    const hl = hitungHariLagi(r.tanggal);
+    return !r.sudah && hl <= 7;
+  });
+  document.getElementById('jumlahMendesak').textContent = mendesak.length;
+
+  if (mendesak.length === 0) {
+    daftarMendesak.innerHTML = '<div class="empty">Tidak ada reminder mendesak. 🎉</div>';
+  } else {
+    daftarMendesak.innerHTML = '';
+    mendesak.forEach((r) => { renderReminderCard(r, daftarMendesak, true); });
+  }
+
+  if (dataReminder.length === 0) {
+    daftarSemua.innerHTML = '<div class="empty">Belum ada reminder. Tambahkan reminder pertama!</div>';
+  } else {
+    daftarSemua.innerHTML = '';
+    dataReminder.forEach((r) => { renderReminderCard(r, daftarSemua, false); });
+  }
+
+  updateDashboard();
+});
+
+function renderReminderCard(r, container, isMendesak) {
+  const hl = hitungHariLagi(r.tanggal);
+  const sts = getStatusReminder(hl, r.sudah);
+  const card = document.createElement('div'); card.className = 'reminder-card';
+  let infoMobil = '';
+  if (r.mobilMerk) infoMobil = '<p>Mobil: <strong>' + r.mobilMerk + ' (' + r.mobilPlat + ')</strong></p>';
+  let tombolAksi = '';
+  if (!r.sudah) {
+    tombolAksi = '<button class="btn btn-selesai" onclick="tandaiSelesai(\'' + r.id + '\')">✅ Tandai Selesai</button>';
+  }
+  tombolAksi += '<button class="btn btn-hapus" onclick="hapusReminder(\'' + r.id + '\')">🗑️ Hapus</button>';
+  card.innerHTML = '<h3>' + (r.jenis === 'Servis' ? '🛠️' : r.jenis === 'Pajak' ? '📅' : '📌') + ' ' + r.judul + '</h3>' +
+    '<p>Jenis: <strong>' + r.jenis + '</strong></p>' +
+    infoMobil +
+    '<p>Tanggal: <strong>' + formatTanggal(r.tanggal) + '</strong></p>' +
+    (r.catatan ? '<p>Catatan: ' + r.catatan + '</p>' : '') +
+    '<p>Hari lagi: <strong>' + (r.sudah ? 'Sudah' : hl < 0 ? Math.abs(hl) + ' hari terlewat' : hl + ' hari lagi') + '</strong></p>' +
+    '<span class="status ' + sts.class + '">' + sts.label + '</span><br>' +
+    tombolAksi;
+  container.appendChild(card);
+}
+
 function updateDropdownMobil() {
   const sel = document.getElementById('pilihMobil');
   const current = sel.value;
@@ -401,6 +553,19 @@ function updateDropdownMobil() {
     const opt = document.createElement('option');
     opt.value = m.id;
     opt.textContent = m.merk + ' - ' + m.plat + ' (' + formatRupiah(m.harga) + '/hari)';
+    sel.appendChild(opt);
+  });
+  sel.value = current;
+}
+
+function updateDropdownReminderMobil() {
+  const sel = document.getElementById('mobilReminder');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">-- Pilih Mobil (opsional) --</option>';
+  dataMobil.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.id;
+    opt.textContent = m.merk + ' - ' + m.plat;
     sel.appendChild(opt);
   });
   sel.value = current;
