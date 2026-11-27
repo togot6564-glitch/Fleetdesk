@@ -9,8 +9,8 @@
 body { background: #f0f4f8; padding: 15px; color: #333; }
 .container { max-width: 600px; margin: 0 auto; }
 h1 { color: #1e40af; text-align: center; margin-bottom: 15px; font-size: 24px; }
-.nav { display: flex; gap: 8px; margin-bottom: 15px; }
-.nav button { flex: 1; padding: 12px; background: white; border: 2px solid #1e40af; color: #1e40af; border-radius: 8px; font-weight: bold; cursor: pointer; }
+.nav { display: flex; gap: 6px; margin-bottom: 15px; }
+.nav button { flex: 1; padding: 10px; background: white; border: 2px solid #1e40af; color: #1e40af; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; }
 .nav button.active { background: #1e40af; color: white; }
 .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 h2 { color: #1e40af; font-size: 18px; margin-bottom: 15px; }
@@ -19,19 +19,24 @@ label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; 
 input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
 .btn { width: 100%; padding: 12px; background: #1e40af; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
 .btn-hapus { background: #dc2626; padding: 8px 12px; font-size: 12px; width: auto; margin-top: 8px; }
-.mobil-card, .penyewa-card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #1e40af; }
-.mobil-card h3, .penyewa-card h3 { color: #1e40af; margin-bottom: 8px; }
-.mobil-card p, .penyewa-card p { font-size: 13px; color: #555; margin-bottom: 4px; }
+.btn-status { background: #16a34a; padding: 8px 12px; font-size: 12px; width: auto; margin-top: 8px; margin-right: 5px; }
+.mobil-card, .penyewa-card, .transaksi-card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #1e40af; }
+.mobil-card h3, .penyewa-card h3, .transaksi-card h3 { color: #1e40af; margin-bottom: 8px; }
+.mobil-card p, .penyewa-card p, .transaksi-card p { font-size: 13px; color: #555; margin-bottom: 4px; }
 .status { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-top: 5px; }
 .status-tersedia { background: #dcfce7; color: #166534; }
 .status-disewa { background: #fef3c7; color: #92400e; }
 .status-maintenance { background: #fee2e2; color: #991b1b; }
+.status-pending { background: #fef3c7; color: #92400e; }
+.status-aktif { background: #dbeafe; color: #1e40af; }
+.status-selesai { background: #dcfce7; color: #166534; }
 .notif { padding: 12px; border-radius: 6px; margin-bottom: 15px; display: none; font-size: 14px; }
 .notif-sukses { background: #dcfce7; color: #166534; }
 .notif-error { background: #fee2e2; color: #991b1b; }
 .empty { text-align: center; color: #999; padding: 20px; font-style: italic; }
 .section { display: none; }
 .section.active { display: block; }
+.total-box { background: #dbeafe; padding: 10px; border-radius: 6px; margin-top: 10px; font-weight: bold; color: #1e40af; text-align: center; }
 </style>
 </head>
 <body>
@@ -40,9 +45,11 @@ input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radiu
   <div class="nav">
     <button id="btnArmada" class="active" onclick="showSection('armada')">🚗 Armada</button>
     <button id="btnPenyewa" onclick="showSection('penyewa')">👤 Penyewa</button>
+    <button id="btnTransaksi" onclick="showSection('transaksi')">📋 Transaksi</button>
   </div>
   <div id="notif" class="notif"></div>
 
+  <!-- SECTION ARMADA -->
   <div id="section-armada" class="section active">
     <div class="card">
       <h2>Tambah Mobil Baru</h2>
@@ -56,6 +63,7 @@ input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radiu
     <div class="card"><h2>Daftar Armada (<span id="jumlahMobil">0</span>)</h2><div id="daftarMobil"></div></div>
   </div>
 
+  <!-- SECTION PENYEWA -->
   <div id="section-penyewa" class="section">
     <div class="card">
       <h2>Tambah Penyewa Baru</h2>
@@ -67,6 +75,21 @@ input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radiu
       <button class="btn" onclick="simpanPenyewa()">💾 Simpan Penyewa</button>
     </div>
     <div class="card"><h2>Daftar Penyewa (<span id="jumlahPenyewa">0</span>)</h2><div id="daftarPenyewa"></div></div>
+  </div>
+
+  <!-- SECTION TRANSAKSI -->
+  <div id="section-transaksi" class="section">
+    <div class="card">
+      <h2>Buat Transaksi Sewa</h2>
+      <div class="form-group"><label>Pilih Mobil</label><select id="pilihMobil"><option value="">-- Pilih Mobil --</option></select></div>
+      <div class="form-group"><label>Pilih Penyewa</label><select id="pilihPenyewa"><option value="">-- Pilih Penyewa --</option></select></div>
+      <div class="form-group"><label>Tanggal Mulai Sewa</label><input type="date" id="tglMulai"></div>
+      <div class="form-group"><label>Durasi (Hari)</label><input type="number" id="durasi" placeholder="3" oninput="hitungTotal()"></div>
+      <div id="totalBox" class="total-box" style="display:none;">Total: Rp 0</div>
+      <div class="form-group" style="margin-top:12px;"><label>Status</label><select id="statusTransaksi"><option value="Pending">Pending</option><option value="Aktif">Aktif</option><option value="Selesai">Selesai</option></select></div>
+      <button class="btn" onclick="simpanTransaksi()">💾 Simpan Transaksi</button>
+    </div>
+    <div class="card"><h2>Daftar Transaksi (<span id="jumlahTransaksi">0</span>)</h2><div id="daftarTransaksi"></div></div>
   </div>
 </div>
 
@@ -85,6 +108,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+let dataMobil = [];
+let dataPenyewa = [];
+
 window.showSection = function(name) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
@@ -92,6 +118,15 @@ window.showSection = function(name) {
   document.getElementById('btn' + name.charAt(0).toUpperCase() + name.slice(1)).classList.add('active');
 };
 
+function tampilkanNotif(pesan, tipe) {
+  const notif = document.getElementById('notif'); notif.textContent = pesan;
+  notif.className = 'notif notif-' + tipe; notif.style.display = 'block';
+  setTimeout(() => { notif.style.display = 'none'; }, 3000);
+}
+
+function formatRupiah(a) { return 'Rp ' + a.toLocaleString('id-ID'); }
+
+// ARMADA
 window.simpanMobil = async function() {
   const plat = document.getElementById('plat').value.trim();
   const merk = document.getElementById('merk').value.trim();
@@ -113,6 +148,7 @@ window.hapusMobil = async function(id) {
   catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
 };
 
+// PENYEWA
 window.simpanPenyewa = async function() {
   const nama = document.getElementById('nama').value.trim();
   const ktp = document.getElementById('ktp').value.trim();
@@ -135,39 +171,143 @@ window.hapusPenyewa = async function(id) {
   catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
 };
 
-function tampilkanNotif(pesan, tipe) {
-  const notif = document.getElementById('notif'); notif.textContent = pesan;
-  notif.className = 'notif notif-' + tipe; notif.style.display = 'block';
-  setTimeout(() => { notif.style.display = 'none'; }, 3000);
-}
+// TRANSAKSI
+window.hitungTotal = function() {
+  const mobilId = document.getElementById('pilihMobil').value;
+  const durasi = parseInt(document.getElementById('durasi').value) || 0;
+  const mobil = dataMobil.find(m => m.id === mobilId);
+  const box = document.getElementById('totalBox');
+  if (mobil && durasi > 0) {
+    const total = mobil.harga * durasi;
+    box.textContent = 'Total: ' + formatRupiah(total) + ' (' + durasi + ' hari × ' + formatRupiah(mobil.harga) + ')';
+    box.style.display = 'block';
+  } else {
+    box.style.display = 'none';
+  }
+};
 
-function formatRupiah(a) { return 'Rp ' + a.toLocaleString('id-ID'); }
+document.getElementById('pilihMobil').addEventListener('change', window.hitungTotal);
 
+window.simpanTransaksi = async function() {
+  const mobilId = document.getElementById('pilihMobil').value;
+  const penyewaId = document.getElementById('pilihPenyewa').value;
+  const tglMulai = document.getElementById('tglMulai').value;
+  const durasi = parseInt(document.getElementById('durasi').value);
+  const status = document.getElementById('statusTransaksi').value;
+  if (!mobilId || !penyewaId || !tglMulai || !durasi) { tampilkanNotif('Mobil, Penyewa, Tanggal, Durasi wajib diisi!', 'error'); return; }
+  const mobil = dataMobil.find(m => m.id === mobilId);
+  const penyewa = dataPenyewa.find(p => p.id === penyewaId);
+  const total = mobil.harga * durasi;
+  try {
+    await addDoc(collection(db, 'transaksi'), {
+      mobilId, mobilPlat: mobil.plat, mobilMerk: mobil.merk, mobilHarga: mobil.harga,
+      penyewaId, penyewaNama: penyewa.nama, penyewaHp: penyewa.hp,
+      tanggalMulai: tglMulai, durasi, total, status,
+      tanggalDibuat: new Date().toISOString()
+    });
+    tampilkanNotif('✅ Transaksi berhasil disimpan!', 'sukses');
+    document.getElementById('pilihMobil').value = '';
+    document.getElementById('pilihPenyewa').value = '';
+    document.getElementById('tglMulai').value = '';
+    document.getElementById('durasi').value = '';
+    document.getElementById('totalBox').style.display = 'none';
+  } catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
+};
+
+window.hapusTransaksi = async function(id) {
+  if (!confirm('Yakin hapus transaksi ini?')) return;
+  try { await deleteDoc(doc(db, 'transaksi', id)); tampilkanNotif('🗑️ Transaksi dihapus!', 'sukses'); }
+  catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
+};
+
+window.ubahStatus = async function(id, statusBaru) {
+  const { updateDoc } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+  try {
+    await updateDoc(doc(db, 'transaksi', id), { status: statusBaru });
+    tampilkanNotif('✅ Status diubah jadi ' + statusBaru, 'sukses');
+  } catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
+};
+
+// LISTENER ARMADA
 onSnapshot(query(collection(db, 'armada'), orderBy('tanggalDibuat', 'desc')), (snapshot) => {
   const daftar = document.getElementById('daftarMobil');
   document.getElementById('jumlahMobil').textContent = snapshot.size;
-  if (snapshot.empty) { daftar.innerHTML = '<div class="empty">Belum ada mobil.</div>'; return; }
+  dataMobil = [];
+  snapshot.forEach((docSnap) => { dataMobil.push({ id: docSnap.id, ...docSnap.data() }); });
+  if (dataMobil.length === 0) { daftar.innerHTML = '<div class="empty">Belum ada mobil.</div>'; return; }
+  daftar.innerHTML = '';
+  dataMobil.forEach((data) => {
+    const card = document.createElement('div'); card.className = 'mobil-card';
+    card.innerHTML = '<h3>' + data.merk + '</h3><p>Plat: <strong>' + data.plat + '</strong></p><p>Tahun: ' + data.tahun + '</p><p>Harga: ' + formatRupiah(data.harga) + '/hari</p><span class="status status-' + data.status.toLowerCase() + '">' + data.status + '</span><br><button class="btn btn-hapus" onclick="hapusMobil(\'' + data.id + '\')">🗑️ Hapus</button>';
+    daftar.appendChild(card);
+  });
+  updateDropdownMobil();
+});
+
+// LISTENER PENYEWA
+onSnapshot(query(collection(db, 'penyewa'), orderBy('tanggalDibuat', 'desc')), (snapshot) => {
+  const daftar = document.getElementById('daftarPenyewa');
+  document.getElementById('jumlahPenyewa').textContent = snapshot.size;
+  dataPenyewa = [];
+  snapshot.forEach((docSnap) => { dataPenyewa.push({ id: docSnap.id, ...docSnap.data() }); });
+  if (dataPenyewa.length === 0) { daftar.innerHTML = '<div class="empty">Belum ada penyewa.</div>'; return; }
+  daftar.innerHTML = '';
+  dataPenyewa.forEach((data) => {
+    const card = document.createElement('div'); card.className = 'penyewa-card';
+    card.innerHTML = '<h3>👤 ' + data.nama + '</h3><p>NIK: ' + data.ktp + '</p><p>SIM: ' + data.sim + '</p><p>HP: ' + data.hp + '</p><p>Alamat: ' + (data.alamat || '-') + '</p><button class="btn btn-hapus" onclick="hapusPenyewa(\'' + data.id + '\')">🗑️ Hapus</button>';
+    daftar.appendChild(card);
+  });
+  updateDropdownPenyewa();
+});
+
+// LISTENER TRANSAKSI
+onSnapshot(query(collection(db, 'transaksi'), orderBy('tanggalDibuat', 'desc')), (snapshot) => {
+  const daftar = document.getElementById('daftarTransaksi');
+  document.getElementById('jumlahTransaksi').textContent = snapshot.size;
+  if (snapshot.empty) { daftar.innerHTML = '<div class="empty">Belum ada transaksi.</div>'; return; }
   daftar.innerHTML = '';
   snapshot.forEach((docSnap) => {
     const data = docSnap.data();
-    const card = document.createElement('div'); card.className = 'mobil-card';
-    card.innerHTML = '<h3>' + data.merk + '</h3><p>Plat: <strong>' + data.plat + '</strong></p><p>Tahun: ' + data.tahun + '</p><p>Harga: ' + formatRupiah(data.harga) + '/hari</p><span class="status status-' + data.status.toLowerCase() + '">' + data.status + '</span><br><button class="btn btn-hapus" onclick="hapusMobil(\'' + docSnap.id + '\')">🗑️ Hapus</button>';
+    const card = document.createElement('div'); card.className = 'transaksi-card';
+    const statusClass = 'status-' + data.status.toLowerCase();
+    card.innerHTML = '<h3>📋 ' + data.mobilMerk + ' (' + data.mobilPlat + ')</h3>' +
+      '<p>Penyewa: <strong>' + data.penyewaNama + '</strong></p>' +
+      '<p>HP: ' + data.penyewaHp + '</p>' +
+      '<p>Mulai: ' + data.tanggalMulai + ' (' + data.durasi + ' hari)</p>' +
+      '<p>Total: <strong>' + formatRupiah(data.total) + '</strong></p>' +
+      '<span class="status ' + statusClass + '">' + data.status + '</span><br>' +
+      '<button class="btn btn-status" onclick="ubahStatus(\'' + docSnap.id + '\',\'Aktif\')">▶️ Aktifkan</button>' +
+      '<button class="btn btn-status" onclick="ubahStatus(\'' + docSnap.id + '\',\'Selesai\')">✅ Selesai</button>' +
+      '<button class="btn btn-hapus" onclick="hapusTransaksi(\'' + docSnap.id + '\')">🗑️ Hapus</button>';
     daftar.appendChild(card);
   });
 });
 
-onSnapshot(query(collection(db, 'penyewa'), orderBy('tanggalDibuat', 'desc')), (snapshot) => {
-  const daftar = document.getElementById('daftarPenyewa');
-  document.getElementById('jumlahPenyewa').textContent = snapshot.size;
-  if (snapshot.empty) { daftar.innerHTML = '<div class="empty">Belum ada penyewa.</div>'; return; }
-  daftar.innerHTML = '';
-  snapshot.forEach((docSnap) => {
-    const data = docSnap.data();
-    const card = document.createElement('div'); card.className = 'penyewa-card';
-    card.innerHTML = '<h3>👤 ' + data.nama + '</h3><p>NIK: ' + data.ktp + '</p><p>SIM: ' + data.sim + '</p><p>HP: ' + data.hp + '</p><p>Alamat: ' + (data.alamat || '-') + '</p><button class="btn btn-hapus" onclick="hapusPenyewa(\'' + docSnap.id + '\')">🗑️ Hapus</button>';
-    daftar.appendChild(card);
+function updateDropdownMobil() {
+  const sel = document.getElementById('pilihMobil');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">-- Pilih Mobil --</option>';
+  dataMobil.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.id;
+    opt.textContent = m.merk + ' - ' + m.plat + ' (' + formatRupiah(m.harga) + '/hari)';
+    sel.appendChild(opt);
   });
-});
+  sel.value = current;
+}
+
+function updateDropdownPenyewa() {
+  const sel = document.getElementById('pilihPenyewa');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">-- Pilih Penyewa --</option>';
+  dataPenyewa.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.nama + ' - ' + p.hp;
+    sel.appendChild(opt);
+  });
+  sel.value = current;
+}
 </script>
 </body>
 </html>
