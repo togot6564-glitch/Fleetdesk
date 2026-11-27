@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -9,67 +8,65 @@
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
 body { background: #f0f4f8; padding: 15px; color: #333; }
 .container { max-width: 600px; margin: 0 auto; }
-h1 { color: #1e40af; text-align: center; margin-bottom: 20px; font-size: 24px; }
+h1 { color: #1e40af; text-align: center; margin-bottom: 15px; font-size: 24px; }
+.nav { display: flex; gap: 8px; margin-bottom: 15px; }
+.nav button { flex: 1; padding: 12px; background: white; border: 2px solid #1e40af; color: #1e40af; border-radius: 8px; font-weight: bold; cursor: pointer; }
+.nav button.active { background: #1e40af; color: white; }
 .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 h2 { color: #1e40af; font-size: 18px; margin-bottom: 15px; }
 .form-group { margin-bottom: 12px; }
-label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; color: #555; } 
+label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; color: #555; }
 input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-input:focus, select:focus { outline: none; border-color: #1e40af; }
 .btn { width: 100%; padding: 12px; background: #1e40af; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
-.btn:hover { background: #1e3a8a; }
-.btn:disabled { background: #93c5fd; cursor: not-allowed; }
 .btn-hapus { background: #dc2626; padding: 8px 12px; font-size: 12px; width: auto; margin-top: 8px; }
-.mobil-card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #1e40af; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-.mobil-card h3 { color: #1e40af; font-size: 16px; margin-bottom: 8px; }
-.mobil-card p { font-size: 13px; color: #555; margin-bottom: 4px; }
+.mobil-card, .penyewa-card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #1e40af; }
+.mobil-card h3, .penyewa-card h3 { color: #1e40af; margin-bottom: 8px; }
+.mobil-card p, .penyewa-card p { font-size: 13px; color: #555; margin-bottom: 4px; }
 .status { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-top: 5px; }
 .status-tersedia { background: #dcfce7; color: #166534; }
 .status-disewa { background: #fef3c7; color: #92400e; }
 .status-maintenance { background: #fee2e2; color: #991b1b; }
 .notif { padding: 12px; border-radius: 6px; margin-bottom: 15px; display: none; font-size: 14px; }
-.notif-sukses { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
-.notif-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-.loading { text-align: center; color: #1e40af; display: none; margin: 10px 0; }
+.notif-sukses { background: #dcfce7; color: #166534; }
+.notif-error { background: #fee2e2; color: #991b1b; }
 .empty { text-align: center; color: #999; padding: 20px; font-style: italic; }
+.section { display: none; }
+.section.active { display: block; }
 </style>
 </head>
 <body>
 <div class="container">
   <h1>🚗 FleetDesk</h1>
-  <div id="notif" class="notif"></div>
-  <div class="card">
-    <h2>Tambah Mobil Baru</h2>
-    <div class="form-group">
-      <label>Plat Nomor</label>
-      <input type="text" id="plat" placeholder="Contoh: B 1234 ABC">
-    </div>
-    <div class="form-group">
-      <label>Merk & Model</label>
-      <input type="text" id="merk" placeholder="Contoh: Toyota Avanza">
-    </div>
-    <div class="form-group">
-      <label>Tahun</label>
-      <input type="number" id="tahun" placeholder="Contoh: 2020">
-    </div>
-    <div class="form-group">
-      <label>Harga Sewa per Hari (Rp)</label>
-      <input type="number" id="harga" placeholder="Contoh: 350000">
-    </div>
-    <div class="form-group">
-      <label>Status</label>
-      <select id="status">
-        <option value="Tersedia">Tersedia</option>
-        <option value="Disewa">Disewa</option>
-        <option value="Maintenance">Maintenance</option>
-      </select>
-    </div>
-    <button class="btn" id="btnSimpan" onclick="simpanMobil()">💾 Simpan Mobil</button>
-    <div class="loading" id="loading">⏳ Menyimpan...</div>
+  <div class="nav">
+    <button id="btnArmada" class="active" onclick="showSection('armada')">🚗 Armada</button>
+    <button id="btnPenyewa" onclick="showSection('penyewa')">👤 Penyewa</button>
   </div>
-  <div class="card">
-    <h2>Daftar Armada (<span id="jumlah">0</span>)</h2>
-    <div id="daftarMobil"></div>
+  <div id="notif" class="notif"></div>
+
+  <div id="section-armada" class="section active">
+    <div class="card">
+      <h2>Tambah Mobil Baru</h2>
+      <div class="form-group"><label>Plat Nomor</label><input type="text" id="plat" placeholder="B 1234 ABC"></div>
+      <div class="form-group"><label>Merk & Model</label><input type="text" id="merk" placeholder="Toyota Avanza"></div>
+      <div class="form-group"><label>Tahun</label><input type="number" id="tahun" placeholder="2020"></div>
+      <div class="form-group"><label>Harga Sewa per Hari (Rp)</label><input type="number" id="harga" placeholder="350000"></div>
+      <div class="form-group"><label>Status</label><select id="status"><option value="Tersedia">Tersedia</option><option value="Disewa">Disewa</option><option value="Maintenance">Maintenance</option></select></div>
+      <button class="btn" onclick="simpanMobil()">💾 Simpan Mobil</button>
+    </div>
+    <div class="card"><h2>Daftar Armada (<span id="jumlahMobil">0</span>)</h2><div id="daftarMobil"></div></div>
+  </div>
+
+  <div id="section-penyewa" class="section">
+    <div class="card">
+      <h2>Tambah Penyewa Baru</h2>
+      <div class="form-group"><label>Nama Lengkap</label><input type="text" id="nama" placeholder="Budi Santoso"></div>
+      <div class="form-group"><label>No. KTP (NIK)</label><input type="text" id="ktp" placeholder="16 digit NIK"></div>
+      <div class="form-group"><label>No. SIM</label><input type="text" id="sim" placeholder="SIM A/B/C"></div>
+      <div class="form-group"><label>No. HP</label><input type="tel" id="hp" placeholder="08123456789"></div>
+      <div class="form-group"><label>Alamat</label><input type="text" id="alamat" placeholder="Alamat lengkap"></div>
+      <button class="btn" onclick="simpanPenyewa()">💾 Simpan Penyewa</button>
+    </div>
+    <div class="card"><h2>Daftar Penyewa (<span id="jumlahPenyewa">0</span>)</h2><div id="daftarPenyewa"></div></div>
   </div>
 </div>
 
@@ -85,9 +82,15 @@ const firebaseConfig = {
   messagingSenderId: "947080041464",
   appId: "1:947080041464:web:b352b9107051c53143bc0d"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+window.showSection = function(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  document.getElementById('btn' + name.charAt(0).toUpperCase() + name.slice(1)).classList.add('active');
+};
 
 window.simpanMobil = async function() {
   const plat = document.getElementById('plat').value.trim();
@@ -95,80 +98,73 @@ window.simpanMobil = async function() {
   const tahun = document.getElementById('tahun').value.trim();
   const harga = document.getElementById('harga').value.trim();
   const status = document.getElementById('status').value;
-  
-  if (!plat || !merk || !tahun || !harga) {
-    tampilkanNotif('Semua field harus diisi!', 'error');
-    return;
-  }
-  
-  const btn = document.getElementById('btnSimpan');
-  const loading = document.getElementById('loading');
-  btn.disabled = true;
-  loading.style.display = 'block';
-  
+  if (!plat || !merk || !tahun || !harga) { tampilkanNotif('Semua field harus diisi!', 'error'); return; }
   try {
-    await addDoc(collection(db, 'armada'), {
-      plat, merk, tahun: parseInt(tahun), harga: parseInt(harga), status,
-      tanggalDibuat: new Date().toISOString()
-    });
+    await addDoc(collection(db, 'armada'), { plat, merk, tahun: parseInt(tahun), harga: parseInt(harga), status, tanggalDibuat: new Date().toISOString() });
     tampilkanNotif('✅ Mobil berhasil disimpan!', 'sukses');
-    document.getElementById('plat').value = '';
-    document.getElementById('merk').value = '';
-    document.getElementById('tahun').value = '';
-    document.getElementById('harga').value = '';
-    document.getElementById('status').value = 'Tersedia';
-  } catch (error) {
-    tampilkanNotif('❌ Gagal: ' + error.message, 'error');
-  } finally {
-    btn.disabled = false;
-    loading.style.display = 'none';
-  }
+    document.getElementById('plat').value = ''; document.getElementById('merk').value = '';
+    document.getElementById('tahun').value = ''; document.getElementById('harga').value = '';
+  } catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
 };
 
 window.hapusMobil = async function(id) {
   if (!confirm('Yakin hapus mobil ini?')) return;
+  try { await deleteDoc(doc(db, 'armada', id)); tampilkanNotif('🗑️ Mobil dihapus!', 'sukses'); }
+  catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
+};
+
+window.simpanPenyewa = async function() {
+  const nama = document.getElementById('nama').value.trim();
+  const ktp = document.getElementById('ktp').value.trim();
+  const sim = document.getElementById('sim').value.trim();
+  const hp = document.getElementById('hp').value.trim();
+  const alamat = document.getElementById('alamat').value.trim();
+  if (!nama || !ktp || !sim || !hp) { tampilkanNotif('Nama, KTP, SIM, HP wajib diisi!', 'error'); return; }
   try {
-    await deleteDoc(doc(db, 'armada', id));
-    tampilkanNotif('🗑️ Mobil dihapus!', 'sukses');
-  } catch (error) {
-    tampilkanNotif('❌ Gagal: ' + error.message, 'error');
-  }
+    await addDoc(collection(db, 'penyewa'), { nama, ktp, sim, hp, alamat, tanggalDibuat: new Date().toISOString() });
+    tampilkanNotif('✅ Penyewa berhasil disimpan!', 'sukses');
+    document.getElementById('nama').value = ''; document.getElementById('ktp').value = '';
+    document.getElementById('sim').value = ''; document.getElementById('hp').value = '';
+    document.getElementById('alamat').value = '';
+  } catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
+};
+
+window.hapusPenyewa = async function(id) {
+  if (!confirm('Yakin hapus penyewa ini?')) return;
+  try { await deleteDoc(doc(db, 'penyewa', id)); tampilkanNotif('🗑️ Penyewa dihapus!', 'sukses'); }
+  catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
 };
 
 function tampilkanNotif(pesan, tipe) {
-  const notif = document.getElementById('notif');
-  notif.textContent = pesan;
-  notif.className = 'notif notif-' + tipe;
-  notif.style.display = 'block';
+  const notif = document.getElementById('notif'); notif.textContent = pesan;
+  notif.className = 'notif notif-' + tipe; notif.style.display = 'block';
   setTimeout(() => { notif.style.display = 'none'; }, 3000);
 }
 
-function formatRupiah(angka) {
-  return 'Rp ' + angka.toLocaleString('id-ID');
-}
+function formatRupiah(a) { return 'Rp ' + a.toLocaleString('id-ID'); }
 
-const q = query(collection(db, 'armada'), orderBy('tanggalDibuat', 'desc'));
-onSnapshot(q, (snapshot) => {
+onSnapshot(query(collection(db, 'armada'), orderBy('tanggalDibuat', 'desc')), (snapshot) => {
   const daftar = document.getElementById('daftarMobil');
-  document.getElementById('jumlah').textContent = snapshot.size;
-  
-  if (snapshot.empty) {
-    daftar.innerHTML = '<div class="empty">Belum ada mobil. Tambahkan mobil pertama!</div>';
-    return;
-  }
-  
+  document.getElementById('jumlahMobil').textContent = snapshot.size;
+  if (snapshot.empty) { daftar.innerHTML = '<div class="empty">Belum ada mobil.</div>'; return; }
   daftar.innerHTML = '';
   snapshot.forEach((docSnap) => {
     const data = docSnap.data();
-    const statusClass = 'status-' + data.status.toLowerCase();
-    const card = document.createElement('div');
-    card.className = 'mobil-card';
-    card.innerHTML = '<h3>' + data.merk + '</h3>' +
-      '<p>Plat: <strong>' + data.plat + '</strong></p>' +
-      '<p>Tahun: ' + data.tahun + '</p>' +
-      '<p>Harga: ' + formatRupiah(data.harga) + '/hari</p>' +
-      '<span class="status ' + statusClass + '">' + data.status + '</span><br>' +
-      '<button class="btn btn-hapus" onclick="hapusMobil(\'' + docSnap.id + '\')">🗑️ Hapus</button>';
+    const card = document.createElement('div'); card.className = 'mobil-card';
+    card.innerHTML = '<h3>' + data.merk + '</h3><p>Plat: <strong>' + data.plat + '</strong></p><p>Tahun: ' + data.tahun + '</p><p>Harga: ' + formatRupiah(data.harga) + '/hari</p><span class="status status-' + data.status.toLowerCase() + '">' + data.status + '</span><br><button class="btn btn-hapus" onclick="hapusMobil(\'' + docSnap.id + '\')">🗑️ Hapus</button>';
+    daftar.appendChild(card);
+  });
+});
+
+onSnapshot(query(collection(db, 'penyewa'), orderBy('tanggalDibuat', 'desc')), (snapshot) => {
+  const daftar = document.getElementById('daftarPenyewa');
+  document.getElementById('jumlahPenyewa').textContent = snapshot.size;
+  if (snapshot.empty) { daftar.innerHTML = '<div class="empty">Belum ada penyewa.</div>'; return; }
+  daftar.innerHTML = '';
+  snapshot.forEach((docSnap) => {
+    const data = docSnap.data();
+    const card = document.createElement('div'); card.className = 'penyewa-card';
+    card.innerHTML = '<h3>👤 ' + data.nama + '</h3><p>NIK: ' + data.ktp + '</p><p>SIM: ' + data.sim + '</p><p>HP: ' + data.hp + '</p><p>Alamat: ' + (data.alamat || '-') + '</p><button class="btn btn-hapus" onclick="hapusPenyewa(\'' + docSnap.id + '\')">🗑️ Hapus</button>';
     daftar.appendChild(card);
   });
 });
