@@ -3,25 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FleetDesk - Manajemen Rental Mobil</title>
+<title>FleetDesk - SaaS Manajemen Rental Mobil</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-body { background: #f0f4f8; padding: 15px; color: #333; }
-.container { max-width: 600px; margin: 0 auto; }
+body { background: #f0f4f8; color: #333; }
+.container { max-width: 600px; margin: 0 auto; padding: 15px; }
 h1 { color: #1e40af; text-align: center; margin-bottom: 15px; font-size: 24px; }
-.nav { display: flex; gap: 6px; margin-bottom: 15px; overflow-x: auto; }
-.nav button { flex: 1; padding: 10px 8px; background: white; border: 2px solid #1e40af; color: #1e40af; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; min-width: 80px; position: relative; }
-.nav button.active { background: #1e40af; color: white; }
-.badge { position: absolute; top: -5px; right: -5px; background: #dc2626; color: white; border-radius: 10px; padding: 2px 6px; font-size: 10px; font-weight: bold; min-width: 18px; text-align: center; }
-.card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 h2 { color: #1e40af; font-size: 18px; margin-bottom: 15px; }
+.landing { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e40af, #3b82f6); padding: 20px; }
+.landing-card { background: white; border-radius: 15px; padding: 30px 25px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.landing-card p { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; }
+.auth-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+.auth-tabs button { flex: 1; padding: 10px; background: #f0f4f8; border: 2px solid #1e40af; color: #1e40af; border-radius: 8px; font-weight: bold; cursor: pointer; }
+.auth-tabs button.active { background: #1e40af; color: white; }
 .form-group { margin-bottom: 12px; }
 label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; color: #555; }
 input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-.btn { width: 100%; padding: 12px; background: #1e40af; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
-.btn-hapus { background: #dc2626; padding: 8px 12px; font-size: 12px; width: auto; margin-top: 8px; }
-.btn-status { background: #16a34a; padding: 8px 12px; font-size: 12px; width: auto; margin-top: 8px; margin-right: 5px; }
-.btn-selesai { background: #059669; padding: 8px 12px; font-size: 12px; width: auto; margin-top: 8px; margin-right: 5px; }
+.btn { width: 100%; padding: 12px; background: #1e40af; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+.btn-danger { background: #dc2626; }
+.btn-success { background: #16a34a; }
+.btn-small { padding: 8px 12px; font-size: 12px; width: auto; margin-top: 8px; margin-right: 5px; }
+.nav { display: flex; gap: 6px; margin-bottom: 15px; overflow-x: auto; }
+.nav button { flex: 1; padding: 10px 8px; background: white; border: 2px solid #1e40af; color: #1e40af; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; min-width: 80px; position: relative; }
+.nav button.active { background: #1e40af; color: white; }
+.badge { position: absolute; top: -5px; right: -5px; background: #dc2626; color: white; border-radius: 10px; padding: 2px 6px; font-size: 10px; font-weight: bold; }
+.user-bar { background: white; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.user-bar strong { color: #1e40af; }
+.card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .mobil-card, .penyewa-card, .transaksi-card, .reminder-card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #1e40af; }
 .mobil-card h3, .penyewa-card h3, .transaksi-card h3, .reminder-card h3 { color: #1e40af; margin-bottom: 8px; }
 .mobil-card p, .penyewa-card p, .transaksi-card p, .reminder-card p { font-size: 13px; color: #555; margin-bottom: 4px; }
@@ -47,9 +55,8 @@ input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radiu
 .stat-card { background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.08); border-top: 4px solid #1e40af; }
 .stat-card.green { border-top-color: #16a34a; }
 .stat-card.orange { border-top-color: #f59e0b; }
-.stat-card.red { border-top-color: #dc2626; }
-.stat-card.purple { border-top-color: #7c3aed; }
 .stat-card.blue { border-top-color: #2563eb; }
+.stat-card.purple { border-top-color: #7c3aed; }
 .stat-number { font-size: 28px; font-weight: bold; color: #1e40af; margin: 5px 0; }
 .stat-label { font-size: 12px; color: #666; }
 .stat-sub { font-size: 11px; color: #999; margin-top: 3px; }
@@ -60,123 +67,137 @@ input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radiu
 .alert-box { background: #fee2e2; border-left: 4px solid #dc2626; padding: 12px; border-radius: 6px; margin-bottom: 10px; }
 .alert-box h4 { color: #991b1b; margin-bottom: 5px; font-size: 14px; }
 .alert-box p { font-size: 12px; color: #7f1d1d; }
+.hidden { display: none !important; }
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>🚗 FleetDesk</h1>
-  <div class="nav">
-    <button id="btnDashboard" class="active" onclick="showSection('dashboard')">📊 Dashboard</button>
-    <button id="btnArmada" onclick="showSection('armada')">🚗 Armada</button>
-    <button id="btnPenyewa" onclick="showSection('penyewa')">👤 Penyewa</button>
-    <button id="btnTransaksi" onclick="showSection('transaksi')">📋 Transaksi</button>
-    <button id="btnReminder" onclick="showSection('reminder')">⏰ Reminder <span id="badgeReminder" class="badge" style="display:none;">0</span></button>
-  </div>
-  <div id="notif" class="notif"></div>
 
-  <!-- DASHBOARD -->
-  <div id="section-dashboard" class="section active">
-    <div class="income-box">
-      <div class="income-label">💰 Pendapatan Bulan Ini</div>
-      <div class="income-value" id="pendapatanBulan">Rp 0</div>
-      <div class="income-sub" id="transaksiAktif">0 transaksi aktif</div>
+<!-- LANDING / AUTH PAGE -->
+<div id="authPage" class="landing">
+  <div class="landing-card">
+    <h1>🚗 FleetDesk</h1>
+    <p>Platform SaaS Manajemen Rental Mobil</p>
+    <div class="auth-tabs">
+      <button id="tabLogin" class="active" onclick="switchAuthTab('login')">Masuk</button>
+      <button id="tabDaftar" onclick="switchAuthTab('daftar')">Daftar Rental</button>
     </div>
-    <div id="alertDashboard"></div>
-    <div class="stat-grid">
-      <div class="stat-card green">
-        <div class="stat-label">🚗 Total Mobil</div>
-        <div class="stat-number" id="statTotalMobil">0</div>
-        <div class="stat-sub" id="statTersedia">0 tersedia</div>
+    <div id="notifAuth" class="notif"></div>
+    <div id="formLogin">
+      <div class="form-group"><label>Email Rental</label><input type="email" id="loginEmail" placeholder="rental@example.com"></div>
+      <div class="form-group"><label>Password</label><input type="password" id="loginPassword" placeholder="Password Anda"></div>
+      <button class="btn" onclick="doLogin()">🔐 Masuk</button>
+    </div>
+    <div id="formDaftar" class="hidden">
+      <div class="form-group"><label>Nama Rental</label><input type="text" id="daftarNama" placeholder="Contoh: Jaya Motor"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="daftarEmail" placeholder="rental@example.com"></div>
+      <div class="form-group"><label>Password (min 6 karakter)</label><input type="password" id="daftarPassword" placeholder="Minimal 6 karakter"></div>
+      <div class="form-group"><label>No. HP Pemilik</label><input type="tel" id="daftarHp" placeholder="08123456789"></div>
+      <button class="btn" onclick="doDaftar()">📝 Daftar Rental Baru</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="appPage" class="hidden">
+  <div class="container">
+    <h1>🚗 FleetDesk</h1>
+    <div class="user-bar">
+      <div>👤 <strong id="namaRentalDisplay">-</strong></div>
+      <button class="btn btn-small btn-danger" onclick="doLogout()">🚪 Keluar</button>
+    </div>
+    <div class="nav">
+      <button id="btnDashboard" class="active" onclick="showSection('dashboard')">📊 Dashboard</button>
+      <button id="btnArmada" onclick="showSection('armada')">🚗 Armada</button>
+      <button id="btnPenyewa" onclick="showSection('penyewa')">👤 Penyewa</button>
+      <button id="btnTransaksi" onclick="showSection('transaksi')">📋 Transaksi</button>
+      <button id="btnReminder" onclick="showSection('reminder')">⏰ Reminder <span id="badgeReminder" class="badge" style="display:none;">0</span></button>
+    </div>
+    <div id="notif" class="notif"></div>
+
+    <div id="section-dashboard" class="section active">
+      <div class="income-box">
+        <div class="income-label">💰 Pendapatan Bulan Ini</div>
+        <div class="income-value" id="pendapatanBulan">Rp 0</div>
+        <div class="income-sub" id="transaksiAktif">0 transaksi aktif</div>
       </div>
-      <div class="stat-card orange">
-        <div class="stat-label">🔑 Sedang Disewa</div>
-        <div class="stat-number" id="statDisewa">0</div>
-        <div class="stat-sub" id="statMaintenance">0 maintenance</div>
+      <div id="alertDashboard"></div>
+      <div class="stat-grid">
+        <div class="stat-card green"><div class="stat-label">🚗 Total Mobil</div><div class="stat-number" id="statTotalMobil">0</div><div class="stat-sub" id="statTersedia">0 tersedia</div></div>
+        <div class="stat-card orange"><div class="stat-label">🔑 Sedang Disewa</div><div class="stat-number" id="statDisewa">0</div><div class="stat-sub" id="statMaintenance">0 maintenance</div></div>
+        <div class="stat-card blue"><div class="stat-label">👤 Total Penyewa</div><div class="stat-number" id="statTotalPenyewa">0</div><div class="stat-sub">terdaftar</div></div>
+        <div class="stat-card purple"><div class="stat-label">📋 Transaksi</div><div class="stat-number" id="statTotalTransaksi">0</div><div class="stat-sub" id="statPending">0 pending</div></div>
       </div>
-      <div class="stat-card blue">
-        <div class="stat-label">👤 Total Penyewa</div>
-        <div class="stat-number" id="statTotalPenyewa">0</div>
-        <div class="stat-sub">terdaftar</div>
+      <div class="card">
+        <h2>📈 Ringkasan Cepat</h2>
+        <p style="font-size:13px;color:#555;margin-bottom:8px;">🟢 Mobil Tersedia: <strong id="ringkasTersedia">0</strong></p>
+        <p style="font-size:13px;color:#555;margin-bottom:8px;">🟡 Mobil Disewa: <strong id="ringkasDisewa">0</strong></p>
+        <p style="font-size:13px;color:#555;margin-bottom:8px;">🔴 Maintenance: <strong id="ringkasMaintenance">0</strong></p>
+        <p style="font-size:13px;color:#555;margin-bottom:8px;">⏳ Transaksi Pending: <strong id="ringkasPending">0</strong></p>
+        <p style="font-size:13px;color:#555;margin-bottom:8px;">▶️ Transaksi Aktif: <strong id="ringkasAktif">0</strong></p>
+        <p style="font-size:13px;color:#555;">✅ Transaksi Selesai: <strong id="ringkasSelesai">0</strong></p>
       </div>
-      <div class="stat-card purple">
-        <div class="stat-label">📋 Transaksi</div>
-        <div class="stat-number" id="statTotalTransaksi">0</div>
-        <div class="stat-sub" id="statPending">0 pending</div>
+    </div>
+
+    <div id="section-armada" class="section">
+      <div class="card">
+        <h2>Tambah Mobil Baru</h2>
+        <div class="form-group"><label>Plat Nomor</label><input type="text" id="plat" placeholder="B 1234 ABC"></div>
+        <div class="form-group"><label>Merk & Model</label><input type="text" id="merk" placeholder="Toyota Avanza"></div>
+        <div class="form-group"><label>Tahun</label><input type="number" id="tahun" placeholder="2020"></div>
+        <div class="form-group"><label>Harga Sewa per Hari (Rp)</label><input type="number" id="harga" placeholder="350000"></div>
+        <div class="form-group"><label>Status</label><select id="status"><option value="Tersedia">Tersedia</option><option value="Disewa">Disewa</option><option value="Maintenance">Maintenance</option></select></div>
+        <button class="btn" onclick="simpanMobil()">💾 Simpan Mobil</button>
       </div>
+      <div class="card"><h2>Daftar Armada (<span id="jumlahMobil">0</span>)</h2><div id="daftarMobil"></div></div>
     </div>
-    <div class="card">
-      <h2>📈 Ringkasan Cepat</h2>
-      <p style="font-size:13px;color:#555;margin-bottom:8px;">🟢 Mobil Tersedia: <strong id="ringkasTersedia">0</strong></p>
-      <p style="font-size:13px;color:#555;margin-bottom:8px;">🟡 Mobil Disewa: <strong id="ringkasDisewa">0</strong></p>
-      <p style="font-size:13px;color:#555;margin-bottom:8px;">🔴 Maintenance: <strong id="ringkasMaintenance">0</strong></p>
-      <p style="font-size:13px;color:#555;margin-bottom:8px;">⏳ Transaksi Pending: <strong id="ringkasPending">0</strong></p>
-      <p style="font-size:13px;color:#555;margin-bottom:8px;">▶️ Transaksi Aktif: <strong id="ringkasAktif">0</strong></p>
-      <p style="font-size:13px;color:#555;">✅ Transaksi Selesai: <strong id="ringkasSelesai">0</strong></p>
-    </div>
-  </div>
 
-  <!-- ARMADA -->
-  <div id="section-armada" class="section">
-    <div class="card">
-      <h2>Tambah Mobil Baru</h2>
-      <div class="form-group"><label>Plat Nomor</label><input type="text" id="plat" placeholder="B 1234 ABC"></div>
-      <div class="form-group"><label>Merk & Model</label><input type="text" id="merk" placeholder="Toyota Avanza"></div>
-      <div class="form-group"><label>Tahun</label><input type="number" id="tahun" placeholder="2020"></div>
-      <div class="form-group"><label>Harga Sewa per Hari (Rp)</label><input type="number" id="harga" placeholder="350000"></div>
-      <div class="form-group"><label>Status</label><select id="status"><option value="Tersedia">Tersedia</option><option value="Disewa">Disewa</option><option value="Maintenance">Maintenance</option></select></div>
-      <button class="btn" onclick="simpanMobil()">💾 Simpan Mobil</button>
+    <div id="section-penyewa" class="section">
+      <div class="card">
+        <h2>Tambah Penyewa Baru</h2>
+        <div class="form-group"><label>Nama Lengkap</label><input type="text" id="nama" placeholder="Budi Santoso"></div>
+        <div class="form-group"><label>No. KTP (NIK)</label><input type="text" id="ktp" placeholder="16 digit NIK"></div>
+        <div class="form-group"><label>No. SIM</label><input type="text" id="sim" placeholder="SIM A/B/C"></div>
+        <div class="form-group"><label>No. HP</label><input type="tel" id="hp" placeholder="08123456789"></div>
+        <div class="form-group"><label>Alamat</label><input type="text" id="alamat" placeholder="Alamat lengkap"></div>
+        <button class="btn" onclick="simpanPenyewa()">💾 Simpan Penyewa</button>
+      </div>
+      <div class="card"><h2>Daftar Penyewa (<span id="jumlahPenyewa">0</span>)</h2><div id="daftarPenyewa"></div></div>
     </div>
-    <div class="card"><h2>Daftar Armada (<span id="jumlahMobil">0</span>)</h2><div id="daftarMobil"></div></div>
-  </div>
 
-  <!-- PENYEWA -->
-  <div id="section-penyewa" class="section">
-    <div class="card">
-      <h2>Tambah Penyewa Baru</h2>
-      <div class="form-group"><label>Nama Lengkap</label><input type="text" id="nama" placeholder="Budi Santoso"></div>
-      <div class="form-group"><label>No. KTP (NIK)</label><input type="text" id="ktp" placeholder="16 digit NIK"></div>
-      <div class="form-group"><label>No. SIM</label><input type="text" id="sim" placeholder="SIM A/B/C"></div>
-      <div class="form-group"><label>No. HP</label><input type="tel" id="hp" placeholder="08123456789"></div>
-      <div class="form-group"><label>Alamat</label><input type="text" id="alamat" placeholder="Alamat lengkap"></div>
-      <button class="btn" onclick="simpanPenyewa()">💾 Simpan Penyewa</button>
+    <div id="section-transaksi" class="section">
+      <div class="card">
+        <h2>Buat Transaksi Sewa</h2>
+        <div class="form-group"><label>Pilih Mobil</label><select id="pilihMobil"><option value="">-- Pilih Mobil --</option></select></div>
+        <div class="form-group"><label>Pilih Penyewa</label><select id="pilihPenyewa"><option value="">-- Pilih Penyewa --</option></select></div>
+        <div class="form-group"><label>Tanggal Mulai Sewa</label><input type="date" id="tglMulai"></div>
+        <div class="form-group"><label>Durasi (Hari)</label><input type="number" id="durasi" placeholder="3" oninput="hitungTotal()"></div>
+        <div id="totalBox" class="total-box" style="display:none;">Total: Rp 0</div>
+        <div class="form-group" style="margin-top:12px;"><label>Status</label><select id="statusTransaksi"><option value="Pending">Pending</option><option value="Aktif">Aktif</option><option value="Selesai">Selesai</option></select></div>
+        <button class="btn" onclick="simpanTransaksi()">💾 Simpan Transaksi</button>
+      </div>
+      <div class="card"><h2>Daftar Transaksi (<span id="jumlahTransaksi">0</span>)</h2><div id="daftarTransaksi"></div></div>
     </div>
-    <div class="card"><h2>Daftar Penyewa (<span id="jumlahPenyewa">0</span>)</h2><div id="daftarPenyewa"></div></div>
-  </div>
 
-  <!-- TRANSAKSI -->
-  <div id="section-transaksi" class="section">
-    <div class="card">
-      <h2>Buat Transaksi Sewa</h2>
-      <div class="form-group"><label>Pilih Mobil</label><select id="pilihMobil"><option value="">-- Pilih Mobil --</option></select></div>
-      <div class="form-group"><label>Pilih Penyewa</label><select id="pilihPenyewa"><option value="">-- Pilih Penyewa --</option></select></div>
-      <div class="form-group"><label>Tanggal Mulai Sewa</label><input type="date" id="tglMulai"></div>
-      <div class="form-group"><label>Durasi (Hari)</label><input type="number" id="durasi" placeholder="3" oninput="hitungTotal()"></div>
-      <div id="totalBox" class="total-box" style="display:none;">Total: Rp 0</div>
-      <div class="form-group" style="margin-top:12px;"><label>Status</label><select id="statusTransaksi"><option value="Pending">Pending</option><option value="Aktif">Aktif</option><option value="Selesai">Selesai</option></select></div>
-      <button class="btn" onclick="simpanTransaksi()">💾 Simpan Transaksi</button>
+    <div id="section-reminder" class="section">
+      <div class="card">
+        <h2>Tambah Reminder Baru</h2>
+        <div class="form-group"><label>Jenis Reminder</label><select id="jenisReminder"><option value="Servis">🛠️ Servis Mobil</option><option value="Pajak">📅 Jatuh Tempo Pajak</option><option value="Lainnya">📌 Lainnya</option></select></div>
+        <div class="form-group"><label>Judul</label><input type="text" id="judulReminder" placeholder="Contoh: Ganti Oli Avanza"></div>
+        <div class="form-group"><label>Mobil Terkait</label><select id="mobilReminder"><option value="">-- Pilih Mobil (opsional) --</option></select></div>
+        <div class="form-group"><label>Tanggal Reminder</label><input type="date" id="tglReminder"></div>
+        <div class="form-group"><label>Catatan</label><input type="text" id="catatanReminder" placeholder="Contoh: Ganti oli setiap 10.000 km"></div>
+        <button class="btn" onclick="simpanReminder()">💾 Simpan Reminder</button>
+      </div>
+      <div class="card"><h2>🔔 Reminder Mendesak (<span id="jumlahMendesak">0</span>)</h2><div id="daftarMendesak"></div></div>
+      <div class="card"><h2>📋 Semua Reminder (<span id="jumlahReminder">0</span>)</h2><div id="daftarReminder"></div></div>
     </div>
-    <div class="card"><h2>Daftar Transaksi (<span id="jumlahTransaksi">0</span>)</h2><div id="daftarTransaksi"></div></div>
-  </div>
-
-  <!-- REMINDER -->
-  <div id="section-reminder" class="section">
-    <div class="card">
-      <h2>Tambah Reminder Baru</h2>
-      <div class="form-group"><label>Jenis Reminder</label><select id="jenisReminder"><option value="Servis">🛠️ Servis Mobil</option><option value="Pajak">📅 Jatuh Tempo Pajak</option><option value="Lainnya">📌 Lainnya</option></select></div>
-      <div class="form-group"><label>Judul</label><input type="text" id="judulReminder" placeholder="Contoh: Ganti Oli Avanza"></div>
-      <div class="form-group"><label>Mobil Terkait</label><select id="mobilReminder"><option value="">-- Pilih Mobil (opsional) --</option></select></div>
-      <div class="form-group"><label>Tanggal Reminder</label><input type="date" id="tglReminder"></div>
-      <div class="form-group"><label>Catatan</label><input type="text" id="catatanReminder" placeholder="Contoh: Ganti oli setiap 10.000 km"></div>
-      <button class="btn" onclick="simpanReminder()">💾 Simpan Reminder</button>
-    </div>
-    <div class="card"><h2>🔔 Reminder Mendesak (<span id="jumlahMendesak">0</span>)</h2><div id="daftarMendesak"></div></div>
-    <div class="card"><h2>📋 Semua Reminder (<span id="jumlahReminder">0</span>)</h2><div id="daftarReminder"></div></div>
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, orderBy, query, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, orderBy, query, updateDoc, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB89T14nT-V6oW0OuKrc7X3Pavbw_wnkxc",
@@ -188,14 +209,112 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
+let currentRentalId = null;
+let currentRentalData = null;
 let dataMobil = [];
 let dataPenyewa = [];
 let dataTransaksi = [];
 let dataReminder = [];
 
-document.getElementById('tglMulai').valueAsDate = new Date();
-document.getElementById('tglReminder').valueAsDate = new Date();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentRentalId = user.uid;
+    loadRentalData(user.uid);
+    document.getElementById('authPage').classList.add('hidden');
+    document.getElementById('appPage').classList.remove('hidden');
+  } else {
+    currentRentalId = null;
+    currentRentalData = null;
+    document.getElementById('authPage').classList.remove('hidden');
+    document.getElementById('appPage').classList.add('hidden');
+  }
+});
+
+function loadRentalData(uid) {
+  onSnapshot(doc(db, 'rentals', uid), (docSnap) => {
+    if (docSnap.exists()) {
+      currentRentalData = docSnap.data();
+      document.getElementById('namaRentalDisplay').textContent = currentRentalData.nama || 'Rental';
+    }
+  });
+}
+
+window.switchAuthTab = function(tab) {
+  if (tab === 'login') {
+    document.getElementById('tabLogin').classList.add('active');
+    document.getElementById('tabDaftar').classList.remove('active');
+    document.getElementById('formLogin').classList.remove('hidden');
+    document.getElementById('formDaftar').classList.add('hidden');
+  } else {
+    document.getElementById('tabDaftar').classList.add('active');
+    document.getElementById('tabLogin').classList.remove('active');
+    document.getElementById('formDaftar').classList.remove('hidden');
+    document.getElementById('formLogin').classList.add('hidden');
+  }
+};
+
+window.doLogin = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password) { tampilkanNotifAuth('❌ Email dan password wajib diisi!', 'error'); return; }
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    tampilkanNotifAuth('✅ Login berhasil!', 'sukses');
+  } catch (error) {
+    let msg = '❌ Gagal login';
+    if (error.code === 'auth/user-not-found') msg = '❌ Email tidak terdaftar';
+    else if (error.code === 'auth/wrong-password') msg = '❌ Password salah';
+    else if (error.code === 'auth/invalid-email') msg = '❌ Format email tidak valid';
+    tampilkanNotifAuth(msg, 'error');
+  }
+};
+
+window.doDaftar = async function() {
+  const nama = document.getElementById('daftarNama').value.trim();
+  const email = document.getElementById('daftarEmail').value.trim();
+  const password = document.getElementById('daftarPassword').value;
+  const hp = document.getElementById('daftarHp').value.trim();
+  if (!nama || !email || !password || !hp) { tampilkanNotifAuth('❌ Semua field wajib diisi!', 'error'); return; }
+  if (password.length < 6) { tampilkanNotifAuth('❌ Password minimal 6 karakter!', 'error'); return; }
+  try {
+    const userCred = await createUserWithEmailAndPassword(auth, email, password);
+    await addDoc(collection(db, 'rentals'), {
+      uid: userCred.user.uid,
+      nama, email, hp,
+      paket: 'Free',
+      tanggalDaftar: new Date().toISOString()
+    });
+    tampilkanNotifAuth('✅ Rental berhasil didaftarkan! Silakan login.', 'sukses');
+    switchAuthTab('login');
+    document.getElementById('loginEmail').value = email;
+  } catch (error) {
+    let msg = '❌ Gagal daftar';
+    if (error.code === 'auth/email-already-in-use') msg = '❌ Email sudah terdaftar';
+    else if (error.code === 'auth/weak-password') msg = '❌ Password terlalu lemah';
+    else if (error.code === 'auth/invalid-email') msg = '❌ Format email tidak valid';
+    tampilkanNotifAuth(msg, 'error');
+  }
+};
+
+window.doLogout = async function() {
+  if (!confirm('Yakin ingin keluar?')) return;
+  try {
+    await signOut(auth);
+    tampilkanNotif('✅ Berhasil keluar', 'sukses');
+  } catch (error) {
+    tampilkanNotif('❌ Gagal logout', 'error');
+  }
+};
+
+function tampilkanNotifAuth(pesan, tipe) {
+  const notif = document.getElementById('notifAuth');
+  notif.textContent = pesan;
+  notif.className = 'notif notif-' + tipe;
+  notif.style.display = 'block';
+  setTimeout(() => { notif.style.display = 'none'; }, 5000);
+}
 
 window.showSection = function(name) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -213,20 +332,17 @@ function tampilkanNotif(pesan, tipe) {
 }
 
 function formatRupiah(a) { return 'Rp ' + (a || 0).toLocaleString('id-ID'); }
-
 function formatTanggal(tgl) {
   if (!tgl) return '-';
   const d = new Date(tgl);
   return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
 }
-
 function hitungHariLagi(tgl) {
   if (!tgl) return 999;
   const today = new Date(); today.setHours(0,0,0,0);
   const target = new Date(tgl); target.setHours(0,0,0,0);
   return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
 }
-
 function getStatusReminder(hariLagi, sudah) {
   if (sudah) return { class: 'status-sudah', label: 'Sudah' };
   if (hariLagi < 0) return { class: 'status-mendesak', label: 'Terlewat!' };
@@ -245,7 +361,6 @@ function updateDashboard() {
   const pending = dataTransaksi.filter(t => t.status === 'Pending').length;
   const aktif = dataTransaksi.filter(t => t.status === 'Aktif').length;
   const selesai = dataTransaksi.filter(t => t.status === 'Selesai').length;
-
   const bulanIni = new Date().getMonth();
   const tahunIni = new Date().getFullYear();
   let pendapatan = 0;
@@ -255,7 +370,6 @@ function updateDashboard() {
       pendapatan += (t.total || 0);
     }
   });
-
   document.getElementById('pendapatanBulan').textContent = formatRupiah(pendapatan);
   document.getElementById('transaksiAktif').textContent = aktif + ' transaksi aktif';
   document.getElementById('statTotalMobil').textContent = totalMobil;
@@ -271,28 +385,15 @@ function updateDashboard() {
   document.getElementById('ringkasPending').textContent = pending;
   document.getElementById('ringkasAktif').textContent = aktif;
   document.getElementById('ringkasSelesai').textContent = selesai;
-
-  // Alert di Dashboard untuk reminder mendesak
-  const reminderMendesak = dataReminder.filter(r => {
-    const hl = hitungHariLagi(r.tanggal);
-    return !r.sudah && hl <= 3;
-  });
+  const reminderMendesak = dataReminder.filter(r => { const hl = hitungHariLagi(r.tanggal); return !r.sudah && hl <= 3; });
   const alertBox = document.getElementById('alertDashboard');
   if (reminderMendesak.length > 0) {
     alertBox.innerHTML = '<div class="alert-box"><h4>🔔 Ada ' + reminderMendesak.length + ' reminder mendesak!</h4><p>Klik tab ⏰ Reminder untuk melihat detail.</p></div>';
-  } else {
-    alertBox.innerHTML = '';
-  }
-
-  // Update badge di tab Reminder
+  } else { alertBox.innerHTML = ''; }
   const badge = document.getElementById('badgeReminder');
   const totalAktif = dataReminder.filter(r => !r.sudah && hitungHariLagi(r.tanggal) <= 7).length;
-  if (totalAktif > 0) {
-    badge.textContent = totalAktif;
-    badge.style.display = 'block';
-  } else {
-    badge.style.display = 'none';
-  }
+  if (totalAktif > 0) { badge.textContent = totalAktif; badge.style.display = 'block'; }
+  else { badge.style.display = 'none'; }
 }
 
 window.simpanMobil = async function() {
@@ -303,7 +404,7 @@ window.simpanMobil = async function() {
   const status = document.getElementById('status').value;
   if (!plat || !merk || !tahun || !harga) { tampilkanNotif('❌ Semua field harus diisi!', 'error'); return; }
   try {
-    await addDoc(collection(db, 'armada'), { plat, merk, tahun: parseInt(tahun), harga: parseInt(harga), status, tanggalDibuat: new Date().toISOString() });
+    await addDoc(collection(db, 'armada'), { rentalId: currentRentalId, plat, merk, tahun: parseInt(tahun), harga: parseInt(harga), status, tanggalDibuat: new Date().toISOString() });
     tampilkanNotif('✅ Mobil berhasil disimpan!', 'sukses');
     document.getElementById('plat').value = ''; document.getElementById('merk').value = '';
     document.getElementById('tahun').value = ''; document.getElementById('harga').value = '';
@@ -324,7 +425,7 @@ window.simpanPenyewa = async function() {
   const alamat = document.getElementById('alamat').value.trim();
   if (!nama || !ktp || !sim || !hp) { tampilkanNotif('❌ Nama, KTP, SIM, HP wajib diisi!', 'error'); return; }
   try {
-    await addDoc(collection(db, 'penyewa'), { nama, ktp, sim, hp, alamat, tanggalDibuat: new Date().toISOString() });
+    await addDoc(collection(db, 'penyewa'), { rentalId: currentRentalId, nama, ktp, sim, hp, alamat, tanggalDibuat: new Date().toISOString() });
     tampilkanNotif('✅ Penyewa berhasil disimpan!', 'sukses');
     document.getElementById('nama').value = ''; document.getElementById('ktp').value = '';
     document.getElementById('sim').value = ''; document.getElementById('hp').value = '';
@@ -367,7 +468,7 @@ window.simpanTransaksi = async function() {
   const total = mobil.harga * durasi;
   try {
     await addDoc(collection(db, 'transaksi'), {
-      mobilId, mobilPlat: mobil.plat, mobilMerk: mobil.merk, mobilHarga: mobil.harga,
+      rentalId: currentRentalId, mobilId, mobilPlat: mobil.plat, mobilMerk: mobil.merk, mobilHarga: mobil.harga,
       penyewaId, penyewaNama: penyewa.nama, penyewaHp: penyewa.hp,
       tanggalMulai: tglMulai, durasi, total, status,
       tanggalDibuat: new Date().toISOString()
@@ -403,9 +504,8 @@ window.simpanReminder = async function() {
   const mobil = dataMobil.find(m => m.id === mobilId);
   try {
     await addDoc(collection(db, 'reminder'), {
-      jenis, judul, mobilId,
-      mobilPlat: mobil ? mobil.plat : null,
-      mobilMerk: mobil ? mobil.merk : null,
+      rentalId: currentRentalId, jenis, judul, mobilId,
+      mobilPlat: mobil ? mobil.plat : null, mobilMerk: mobil ? mobil.merk : null,
       tanggal, catatan, sudah: false,
       tanggalDibuat: new Date().toISOString()
     });
@@ -429,7 +529,8 @@ window.tandaiSelesai = async function(id) {
   } catch (error) { tampilkanNotif('❌ Gagal: ' + error.message, 'error'); }
 };
 
-onSnapshot(query(collection(db, 'armada'), orderBy('tanggalDibuat', 'desc')), (snapshot) => {
+onSnapshot(query(collection(db, 'armada'), where('rentalId', '==', currentRentalId || ''), orderBy('tanggalDibuat', 'desc')), (snapshot) => {
+  if (!currentRentalId) return;
   const daftar = document.getElementById('daftarMobil');
   document.getElementById('jumlahMobil').textContent = snapshot.size;
   dataMobil = [];
@@ -439,7 +540,7 @@ onSnapshot(query(collection(db, 'armada'), orderBy('tanggalDibuat', 'desc')), (s
     daftar.innerHTML = '';
     dataMobil.forEach((data) => {
       const card = document.createElement('div'); card.className = 'mobil-card';
-      card.innerHTML = '<h3>' + data.merk + '</h3><p>Plat: <strong>' + data.plat + '</strong></p><p>Tahun: ' + data.tahun + '</p><p>Harga: ' + formatRupiah(data.harga) + '/hari</p><span class="status status-' + data.status.toLowerCase() + '">' + data.status + '</span><br><button class="btn btn-hapus" onclick="hapusMobil(\'' + data.id + '\')">🗑️ Hapus</button>';
+      card.innerHTML = '<h3>' + data.merk + '</h3><p>Plat: <strong>' + data.plat + '</strong></p><p>Tahun: ' + data.tahun + '</p><p>Harga: ' + formatRupiah(data.harga) + '/hari</p><span class="status status-' + data.status.toLowerCase() + '">' + data.status + '</span><br><button class="btn btn-small btn-danger" onclick="hapusMobil(\'' + data.id + '\')">🗑️ Hapus</button>';
       daftar.appendChild(card);
     });
   }
@@ -448,7 +549,8 @@ onSnapshot(query(collection(db, 'armada'), orderBy('tanggalDibuat', 'desc')), (s
   updateDashboard();
 });
 
-onSnapshot(query(collection(db, 'penyewa'), orderBy('tanggalDibuat', 'desc')), (snapshot) => {
+onSnapshot(query(collection(db, 'penyewa'), where('rentalId', '==', currentRentalId || ''), orderBy('tanggalDibuat', 'desc')), (snapshot) => {
+  if (!currentRentalId) return;
   const daftar = document.getElementById('daftarPenyewa');
   document.getElementById('jumlahPenyewa').textContent = snapshot.size;
   dataPenyewa = [];
@@ -458,7 +560,7 @@ onSnapshot(query(collection(db, 'penyewa'), orderBy('tanggalDibuat', 'desc')), (
     daftar.innerHTML = '';
     dataPenyewa.forEach((data) => {
       const card = document.createElement('div'); card.className = 'penyewa-card';
-      card.innerHTML = '<h3>👤 ' + data.nama + '</h3><p>NIK: ' + data.ktp + '</p><p>SIM: ' + data.sim + '</p><p>HP: ' + data.hp + '</p><p>Alamat: ' + (data.alamat || '-') + '</p><button class="btn btn-hapus" onclick="hapusPenyewa(\'' + data.id + '\')">🗑️ Hapus</button>';
+      card.innerHTML = '<h3>👤 ' + data.nama + '</h3><p>NIK: ' + data.ktp + '</p><p>SIM: ' + data.sim + '</p><p>HP: ' + data.hp + '</p><p>Alamat: ' + (data.alamat || '-') + '</p><button class="btn btn-small btn-danger" onclick="hapusPenyewa(\'' + data.id + '\')">🗑️ Hapus</button>';
       daftar.appendChild(card);
     });
   }
@@ -466,7 +568,8 @@ onSnapshot(query(collection(db, 'penyewa'), orderBy('tanggalDibuat', 'desc')), (
   updateDashboard();
 });
 
-onSnapshot(query(collection(db, 'transaksi'), orderBy('tanggalDibuat', 'desc')), (snapshot) => {
+onSnapshot(query(collection(db, 'transaksi'), where('rentalId', '==', currentRentalId || ''), orderBy('tanggalDibuat', 'desc')), (snapshot) => {
+  if (!currentRentalId) return;
   const daftar = document.getElementById('daftarTransaksi');
   document.getElementById('jumlahTransaksi').textContent = snapshot.size;
   dataTransaksi = [];
@@ -483,57 +586,46 @@ onSnapshot(query(collection(db, 'transaksi'), orderBy('tanggalDibuat', 'desc')),
         '<p>Mulai: ' + data.tanggalMulai + ' (' + data.durasi + ' hari)</p>' +
         '<p>Total: <strong>' + formatRupiah(data.total) + '</strong></p>' +
         '<span class="status ' + statusClass + '">' + data.status + '</span><br>' +
-        '<button class="btn btn-status" onclick="ubahStatus(\'' + data.id + '\',\'Aktif\')">▶️ Aktifkan</button>' +
-        '<button class="btn btn-status" onclick="ubahStatus(\'' + data.id + '\',\'Selesai\')">✅ Selesai</button>' +
-        '<button class="btn btn-hapus" onclick="hapusTransaksi(\'' + data.id + '\')">🗑️ Hapus</button>';
+        '<button class="btn btn-small btn-success" onclick="ubahStatus(\'' + data.id + '\',\'Aktif\')">▶️ Aktifkan</button>' +
+        '<button class="btn btn-small btn-success" onclick="ubahStatus(\'' + data.id + '\',\'Selesai\')">✅ Selesai</button>' +
+        '<button class="btn btn-small btn-danger" onclick="hapusTransaksi(\'' + data.id + '\')">🗑️ Hapus</button>';
       daftar.appendChild(card);
     });
   }
   updateDashboard();
 });
 
-onSnapshot(query(collection(db, 'reminder'), orderBy('tanggal', 'asc')), (snapshot) => {
+onSnapshot(query(collection(db, 'reminder'), where('rentalId', '==', currentRentalId || ''), orderBy('tanggal', 'asc')), (snapshot) => {
+  if (!currentRentalId) return;
   dataReminder = [];
   snapshot.forEach((docSnap) => { dataReminder.push({ id: docSnap.id, ...docSnap.data() }); });
-
   const daftarMendesak = document.getElementById('daftarMendesak');
   const daftarSemua = document.getElementById('daftarReminder');
   document.getElementById('jumlahReminder').textContent = dataReminder.length;
-
-  const mendesak = dataReminder.filter(r => {
-    const hl = hitungHariLagi(r.tanggal);
-    return !r.sudah && hl <= 7;
-  });
+  const mendesak = dataReminder.filter(r => { const hl = hitungHariLagi(r.tanggal); return !r.sudah && hl <= 7; });
   document.getElementById('jumlahMendesak').textContent = mendesak.length;
-
-  if (mendesak.length === 0) {
-    daftarMendesak.innerHTML = '<div class="empty">Tidak ada reminder mendesak. 🎉</div>';
-  } else {
+  if (mendesak.length === 0) { daftarMendesak.innerHTML = '<div class="empty">Tidak ada reminder mendesak. 🎉</div>'; }
+  else {
     daftarMendesak.innerHTML = '';
-    mendesak.forEach((r) => { renderReminderCard(r, daftarMendesak, true); });
+    mendesak.forEach((r) => { renderReminderCard(r, daftarMendesak); });
   }
-
-  if (dataReminder.length === 0) {
-    daftarSemua.innerHTML = '<div class="empty">Belum ada reminder. Tambahkan reminder pertama!</div>';
-  } else {
+  if (dataReminder.length === 0) { daftarSemua.innerHTML = '<div class="empty">Belum ada reminder. Tambahkan reminder pertama!</div>'; }
+  else {
     daftarSemua.innerHTML = '';
-    dataReminder.forEach((r) => { renderReminderCard(r, daftarSemua, false); });
+    dataReminder.forEach((r) => { renderReminderCard(r, daftarSemua); });
   }
-
   updateDashboard();
 });
 
-function renderReminderCard(r, container, isMendesak) {
+function renderReminderCard(r, container) {
   const hl = hitungHariLagi(r.tanggal);
   const sts = getStatusReminder(hl, r.sudah);
   const card = document.createElement('div'); card.className = 'reminder-card';
   let infoMobil = '';
   if (r.mobilMerk) infoMobil = '<p>Mobil: <strong>' + r.mobilMerk + ' (' + r.mobilPlat + ')</strong></p>';
   let tombolAksi = '';
-  if (!r.sudah) {
-    tombolAksi = '<button class="btn btn-selesai" onclick="tandaiSelesai(\'' + r.id + '\')">✅ Tandai Selesai</button>';
-  }
-  tombolAksi += '<button class="btn btn-hapus" onclick="hapusReminder(\'' + r.id + '\')">🗑️ Hapus</button>';
+  if (!r.sudah) tombolAksi = '<button class="btn btn-small btn-success" onclick="tandaiSelesai(\'' + r.id + '\')">✅ Tandai Selesai</button>';
+  tombolAksi += '<button class="btn btn-small btn-danger" onclick="hapusReminder(\'' + r.id + '\')">🗑️ Hapus</button>';
   card.innerHTML = '<h3>' + (r.jenis === 'Servis' ? '🛠️' : r.jenis === 'Pajak' ? '📅' : '📌') + ' ' + r.judul + '</h3>' +
     '<p>Jenis: <strong>' + r.jenis + '</strong></p>' +
     infoMobil +
@@ -583,6 +675,9 @@ function updateDropdownPenyewa() {
   });
   sel.value = current;
 }
+
+document.getElementById('tglMulai').valueAsDate = new Date();
+document.getElementById('tglReminder').valueAsDate = new Date();
 </script>
 </body>
 </html>
